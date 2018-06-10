@@ -9,7 +9,6 @@ COIN_REPO='https://github.com/suprodev/supro/releases/download/v1.0.0.1/supro-1.
 COIN_NAME='supro'
 COIN_PORT=47113
 
-
 NODEIP=$(curl -s4 icanhazip.com)
 
 
