@@ -27,6 +27,7 @@ function compile_node() {
   tar xvzf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
   cp bin/supro* /usr/local/bin
+  chmod 755 /usr/local/bin/supro*
   compile_error
   strip $COIN_DAEMON $COIN_CLI
   cd - >/dev/null 2>&1
