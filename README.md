@@ -5,8 +5,8 @@ This script will install **Supro 1.0.0.1**.
 
 ## Installation:
 ```
-wget -q https://raw.githubusercontent.com/zoldur/Supro/master/Supro_install.sh
-bash Supro_install.sh
+wget -q https://github.com/suprodev/SuproMNscript/blob/master/supro_install.sh
+bash supro_install.sh
 ```
 ***
 
