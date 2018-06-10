@@ -1,14 +1,13 @@
 #!/bin/bash
 
 TMP_FOLDER=$(mktemp -d)
-CONFIG_FILE='polis.conf'
-CONFIGFOLDER='/root/.poliscore'
-COIN_DAEMON='/usr/local/bin/polisd'
-COIN_CLI='/usr/local/bin/polis-cli'
-COIN_REPO='https://github.com/polispay/polis/releases/download/v1.3.0/poliscore-1.3.0-x86_64-linux-gnu.tar.gz'
-SENTINEL_REPO='https://github.com/polispay/sentinel'
-COIN_NAME='Polis'
-COIN_PORT=24126
+CONFIG_FILE='supro.conf'
+CONFIGFOLDER='/root/.supro'
+COIN_DAEMON='/usr/local/bin/suprod'
+COIN_CLI='/usr/local/bin/supro-cli'
+COIN_REPO='https://github.com/suprodev/supro/releases/download/v1.0.0.1/supro-1.0.0.1-x86_64-linux.tar.gz'
+COIN_NAME='supro'
+COIN_PORT=47113
 
 
 NODEIP=$(curl -s4 icanhazip.com)
@@ -19,20 +18,6 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 
 
-function install_sentinel() {
-  echo -e "${GREEN}Install sentinel.${NC}"
-  apt-get -y install python-virtualenv virtualenv >/dev/null 2>&1
-  git clone $SENTINEL_REPO /sentinel >/dev/null 2>&1
-  cd /sentinel
-  virtualenv ./venv >/dev/null 2>&1
-  ./venv/bin/pip install -r requirements.txt >/dev/null 2>&1
-  echo  "* * * * * cd /sentinel && ./venv/bin/python bin/sentinel.py >> $CONFIGFOLDER/sentinel.log 2>&1" > $CONFIGFOLDER/$COIN_NAME.cron
-  crontab $CONFIGFOLDER/$COIN_NAME.cron
-  rm $CONFIGFOLDER/$COIN_NAME.cron >/dev/null 2>&1
-  cd -
-}
-
-
 function compile_node() {
   echo -e "Prepare to download $COIN_NAME"
   cd $TMP_FOLDER
@@ -41,7 +26,7 @@ function compile_node() {
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
   tar xvzf $COIN_ZIP --strip 1 >/dev/null 2>&1
   compile_error
-  cp bin/polis* /usr/local/bin
+  cp bin/supro* /usr/local/bin
   compile_error
   strip $COIN_DAEMON $COIN_CLI
   cd - >/dev/null 2>&1
@@ -136,19 +121,11 @@ maxconnections=256
 masternode=1
 externalip=$NODEIP:$COIN_PORT
 masternodeprivkey=$COINKEY
-addnode=polispay.org
-addnode=node1.polispay.org
-addnode=node2.polispay.org
-addnode=46.101.32.72:24126
-addnode=144.202.19.190:24126
-addnode=207.148.5.135:24126
-addnode=89.47.165.165:24126
-addnode=62.75.139.140:24126
-addnode=207.148.5.135:24126
-addnode=209.250.245.66:24126
-addnode=199.247.3.98:24126
-addnode=199.247.29.65:24126
-addnode=45.32.149.254:24126
+addnode=supro.cc
+addnode=78.46.14.89:47113
+addnode=78.46.14.90:47113
+addnode=78.46.14.91:47113
+addnode=78.46.14.92:47113
 EOF
 }
 
@@ -255,10 +232,6 @@ function important_information() {
  echo -e "Stop: ${RED}systemctl stop $COIN_NAME.service${NC}"
  echo -e "VPS_IP:PORT ${RED}$NODEIP:$COIN_PORT${NC}"
  echo -e "MASTERNODE PRIVATEKEY is: ${RED}$COINKEY${NC}"
- if [[ -n $SENTINEL_REPO  ]]; then
-  echo -e "${RED}Sentinel${NC} is installed in ${RED}/sentinel${NC}"
-  echo -e "Sentinel logs is: ${RED}$CONFIGFOLDER/sentinel.log${NC}"
- fi
  echo -e "Please check ${RED}$COIN_NAME${NC} is running with the following command: ${RED}systemctl status $COIN_NAME.service${NC}"
  echo -e "================================================================================================================================"
 }
@@ -269,7 +242,6 @@ function setup_node() {
   create_key
   update_config
   enable_firewall
-  install_sentinel
   important_information
   configure_systemd
 }
