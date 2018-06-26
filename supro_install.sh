@@ -6,7 +6,7 @@ CONFIGFOLDER='/root/.supro'
 COIN_DAEMON='/usr/local/bin/suprod'
 COIN_CLI='/usr/local/bin/supro-cli'
 #COIN_CLI='/usr/local/bin/supro-cli'
-COIN_REPO='https://github.com/suprodev/supro/releases/download/v1.0.0.1/supro-1.0.0.1-x86_64-linux.tar.gz'
+COIN_REPO='https://github.com/suprodev/supro/releases/download/v1.0.0.2/supro-1.0.0.2-x86_64-linux-gnu.tar.gz'
 COIN_NAME='supro'
 COIN_PORT=47113
 
